@@ -79,7 +79,7 @@ class CountCommand {
         let message = `현재 기록된 채널 [${e.Channel.Client.ClientName}] - ${e.Channel.Name} (${e.Channel.IdentityId}) 의 채팅 수는\n${chatCount}(개) 입니다.`;
         if (chatCount > 0) {
             let firstChat = await this.chatManager.getChat(entry, 0);
-            message += `\n최초 기록된 채팅은 ${new Date(firstChat.timestamp).toString()} 에 ${firstChat.client}] - ${firstChat.sender.nickname} (${firstChat.sender.identifyId})이 보낸\n - ${firstChat.message}\n 입니다.`;
+            message += `\n최초 기록된 채팅은 ${new Date(firstChat.timestamp).toLocaleString()} 에 [${firstChat.client}] - ${firstChat.sender.nickname} (${firstChat.sender.identifyId})이 보낸\n - ${firstChat.message}\n 입니다.`;
         }
         e.Channel.sendText(message);
     }
@@ -106,15 +106,15 @@ class GetCommand {
         }
         let entry = await this.chatManager.getChannelEntry(e.Channel);
         let chatCount = await this.chatManager.getChatCount(entry);
-        let index = Math.min(Math.max(rawNumber, 1), chatCount);
+        let index = Math.min(Math.max(Math.floor(rawNumber), 1), chatCount);
         if (chatCount < 1) {
             e.Channel.sendText(`채널 [${e.Channel.Client.ClientName}] - ${e.Channel.Name} (${e.Channel.IdentityId}) 에 기록된 채팅이 없습니다`);
             return;
         }
         let chat = await this.chatManager.getChat(entry, index);
-        let text = `[${e.Channel.Client.ClientName}] - ${e.Channel.Name} (${e.Channel.IdentityId}) ${index} 번째 채팅\n(UTC) ${new Date(chat.timestamp).toUTCString()} - ${chat.client}] - ${chat.sender.nickname} (${chat.sender.identifyId}): ${chat.message}\n`;
+        let text = `[${e.Channel.Client.ClientName}] - ${e.Channel.Name} (${e.Channel.IdentityId}) ${index} 번째 채팅\n(UTC) ${new Date(chat.timestamp).toLocaleString()} - [${chat.client}] - ${chat.sender.nickname} (${chat.sender.identifyId}): ${chat.message}\n`;
         if (chat.attachments.count > 0) {
-            text += `\n첨부파일 ${chat.attachments.count} 개\n\n`;
+            text += `\n 추가 파일 ${chat.attachments.count} 개\n\n`;
         }
         for (let i = 0; i < chat.attachments.count; i++) {
             let attachment = chat.attachments[i];
