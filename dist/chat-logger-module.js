@@ -8,6 +8,8 @@ class ChatLoggerModule extends core_1.BotModule {
         super();
         this.chatManager = new chat_manager_1.ChatManager(dbEntry);
         this.CommandManager.addCommand(new log_command_1.LogCommand(this.chatManager));
+        this.CommandManager.addCommand(new log_command_1.CountCommand(this.chatManager));
+        this.CommandManager.addCommand(new log_command_1.GetCommand(this.chatManager));
         this.on('message', this.onChat.bind(this));
     }
     get Name() {
