@@ -7,6 +7,23 @@ export declare class ChatManager {
     getChatCount(chatlogEntry: DatabaseEntry): Promise<number>;
     setChatCount(chatlogEntry: DatabaseEntry, count: number): Promise<void>;
     getChatsEntry(chatlogEntry: DatabaseEntry): Promise<DatabaseEntry>;
-    getChat(chatlogEntry: DatabaseEntry, index: number): Promise<any>;
+    getChat(chatlogEntry: DatabaseEntry, index: number): Promise<Chatlog>;
     logMessage(message: UserMessage): Promise<void>;
+}
+export interface Chatlog {
+    message: string;
+    timestamp: number;
+    client: string;
+    sender: {
+        identifyId: string;
+        nickname: string;
+    };
+    attachments: ChatAttachmentList;
+}
+export interface ChatAttachmentList {
+    [key: number]: {
+        type: string;
+        url: string;
+    };
+    count: number;
 }

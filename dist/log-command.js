@@ -60,4 +60,29 @@ class LogCommand {
     }
 }
 exports.LogCommand = LogCommand;
+class CountCommand {
+    constructor(chatManager) {
+        this.chatManager = chatManager;
+    }
+    get CommandList() {
+        return ['count'];
+    }
+    get Usage() {
+        return 'chat/count';
+    }
+    get Description() {
+        return '해당 채널의 채팅 로그 갯수를 가져옵니다';
+    }
+    async onCommand(e, logger) {
+        let entry = await this.chatManager.getChannelEntry(e.Channel);
+        let chatCount = await this.chatManager.getChatCount(entry);
+        let message = `현재 기록된 채널 [${e.Channel.Client.ClientName}] - ${e.Channel.Name} (${e.Channel.IdentityId}) 의 채팅 수는\n${chatCount}(개) 입니다.`;
+        if (chatCount > 0) {
+            let firstChat = await this.chatManager.getChat(entry, 0);
+            message += `\n최초 기록된 채팅은 ${new Date(firstChat.timestamp).toString()} 에 ${firstChat.client}] - ${firstChat.sender.nickname} (${firstChat.sender.identifyId})이 보낸\n - ${firstChat.message}\n 입니다.`;
+        }
+        e.Channel.sendText(message);
+    }
+}
+exports.CountCommand = CountCommand;
 //# sourceMappingURL=log-command.js.map

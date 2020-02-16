@@ -43,8 +43,8 @@ export class ChatManager {
         return await chatlogEntry.getEntry('chats');
     }
 
-    async getChat(chatlogEntry: DatabaseEntry, index: number): Promise<any> {
-        return await (await this.getChatsEntry(chatlogEntry)).get(index.toString()) as any;
+    async getChat(chatlogEntry: DatabaseEntry, index: number): Promise<Chatlog> {
+        return await (await this.getChatsEntry(chatlogEntry)).get(index.toString()) as Chatlog;
     }
 
     async logMessage(message: UserMessage) {
@@ -67,16 +67,38 @@ export class ChatManager {
 
         (await this.getChatsEntry(logEntry)).set(index + '', {
             'message': message.Text,
-            'attachments': attachmentList,
+            'attachments': attachmentList as ChatAttachmentList,
             'timestamp': message.Timestamp,
             'sender': {
                 'identifyId': message.Sender.IdentityId,
                 'nickname': message.Sender.Name
             },
             'client': message.Channel.Client.ClientName
-        });
+        } as Chatlog);
 
         await this.setChatCount(logEntry, index + 1);
     }
+
+}
+
+export interface Chatlog {
+    message: string;
+    timestamp: number;
+    client: string;
+    sender: {
+        identifyId: string,
+        nickname: string
+    };
+    attachments: ChatAttachmentList
+}
+
+export interface ChatAttachmentList {
+
+    [key: number]: {
+        type: string,
+        url: string
+    };
+
+    count: number;
 
 }
