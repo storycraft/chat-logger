@@ -1,5 +1,5 @@
 import { BotModule, DatabaseEntry, BotMessageEvent } from "@akaiv/core";
-import { LogCommand } from "./log-command";
+import { LogCommand, CountCommand } from "./log-command";
 import { ChatManager } from "./chat-manager";
 
 /*
@@ -20,6 +20,7 @@ export class ChatLoggerModule extends BotModule {
         this.chatManager = new ChatManager(dbEntry);
 
         this.CommandManager.addCommand(new LogCommand(this.chatManager));
+        this.CommandManager.addCommand(new CountCommand(this.chatManager));
 
         this.on('message', this.onChat.bind(this));
     }
