@@ -73,14 +73,7 @@ export class LogCommand implements CommandInfo {
             }
         }
 
-        if (logMessage.length <= 1000) {
-            e.Channel.sendText(logMessage);
-        } else {
-            for (let i = 0; i * 1000 < logMessage.length; i++) {
-                await e.Channel.sendText(logMessage.substring(i * 1000, (i + 1) * 1000));
-                await new Promise((resolve, reject) => setTimeout(resolve, 500));
-            }
-        }
+        e.Channel.sendText(logMessage);
     }
 
 }
