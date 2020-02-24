@@ -51,6 +51,7 @@ export class ChatManager {
         let logEntry = await this.getChannelEntry(message.Channel);
 
         let index = await this.getChatCount(logEntry);
+        await this.setChatCount(logEntry, index + 1);
 
         let attachmentList: any = {};
 
@@ -75,8 +76,6 @@ export class ChatManager {
             },
             'client': message.Channel.Client.ClientName
         } as Chatlog);
-
-        await this.setChatCount(logEntry, index + 1);
     }
 
 }

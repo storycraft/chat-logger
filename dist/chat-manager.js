@@ -26,6 +26,7 @@ class ChatManager {
     async logMessage(message) {
         let logEntry = await this.getChannelEntry(message.Channel);
         let index = await this.getChatCount(logEntry);
+        await this.setChatCount(logEntry, index + 1);
         let attachmentList = {};
         let i = 0;
         for (i = 0; i < message.AttachmentList.length; i++) {
@@ -46,7 +47,6 @@ class ChatManager {
             },
             'client': message.Channel.Client.ClientName
         });
-        await this.setChatCount(logEntry, index + 1);
     }
 }
 exports.ChatManager = ChatManager;
